@@ -1,5 +1,5 @@
 
-package com.fareslopez.fastorder.enums;
+package com.fareslopez.fastorder.auth.enums;
 
 public enum Rol {
     ADMIN,
