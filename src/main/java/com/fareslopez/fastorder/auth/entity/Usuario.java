@@ -1,7 +1,7 @@
 
-package com.fareslopez.fastorder.entity;
+package com.fareslopez.fastorder.auth.entity;
 
-import com.fareslopez.fastorder.enums.Rol;
+import com.fareslopez.fastorder.auth.enums.Rol;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
