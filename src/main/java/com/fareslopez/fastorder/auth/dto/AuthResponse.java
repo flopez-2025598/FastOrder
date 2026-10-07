@@ -1,10 +1,16 @@
 package com.fareslopez.fastorder.auth.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.fareslopez.fastorder.auth.enums.Rol;
 
-@Data
-@AllArgsConstructor
-public class AuthResponse {
-    private String token;
+public record AuthResponse(
+        String token,
+        String tipo,
+        Long id,
+        String nombre,
+        String email,
+        Rol rol
+) {
+    public static AuthResponse bearer(String token, Long id, String nombre, String email, Rol rol) {
+        return new AuthResponse(token, "Bearer", id, nombre, email, rol);
+    }
 }
