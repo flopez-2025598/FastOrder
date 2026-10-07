@@ -1,11 +1,10 @@
-
 package com.fareslopez.fastorder.auth.entity;
 
 import com.fareslopez.fastorder.auth.enums.Rol;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "usuarios")
@@ -21,13 +20,20 @@ public class Usuario {
     @Column(nullable = false, length = 100)
     private String nombre;
 
-    @Column(nullable = false, unique = true, length = 150)
-    private String correo;
+    @Column(length = 200)
+    private String direccion;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(length = 20)
+    private String telefono;
+
+    @Column(nullable = false, unique = true, length = 150)
+    private String email;
+
+    // Siempre se guarda encriptada con BCrypt
+    @Column(nullable = false)
+    private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private Rol rol = Rol.CLIENTE;
 }

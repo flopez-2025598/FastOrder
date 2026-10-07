@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,32 +17,52 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class Pedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Usuario cliente;
 
+    // Nullable: se asigna cuando un REPARTIDOR toma el pedido
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "repartidor_id") // Es nullable según rúbrica
+    @JoinColumn(name = "repartidor_id")
     private Usuario repartidor;
 
-    @Column(nullable = false)
+    @Column(name = "fecha_pedido", nullable = false)
     private LocalDateTime fechaPedido;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "costo_envio", nullable = false, precision = 10, scale = 2)
     private BigDecimal costoEnvio;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "monto_total", nullable = false, precision = 10, scale = 2)
     private BigDecimal montoTotal;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private EstadoPedido estado = EstadoPedido.PENDIENTE;
 
-    // Relación bidireccional para manejar los ítems juntos
+    // Relación bidireccional: los detalles se guardan/eliminan junto con el pedido
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles = new ArrayList<>();
+
+    /**
+     * Mantiene sincronizados ambos lados de la relación Pedido <-> DetallePedido.
+     */
+    public void agregarDetalle(DetallePedido detalle) {
+        detalle.setPedido(this);
+        this.detalles.add(detalle);
+    }
+
+    @PrePersist
+    void prePersist() {
+        if (fechaPedido == null) {
+            fechaPedido = LocalDateTime.now();
+        }
+        if (estado == null) {
+            estado = EstadoPedido.PENDIENTE;
+        }
+    }
 }
