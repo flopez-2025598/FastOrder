@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: fastorder-db
+    environment:
+      POSTGRES_DB: fastorder_fares_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - fastorder-data:/var/lib/postgresql/data
+
+volumes:
+  fastorder-data:
