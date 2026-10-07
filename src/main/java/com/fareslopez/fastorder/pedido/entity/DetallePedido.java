@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -13,22 +14,24 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 public class DetallePedido {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "pedido_id", nullable = false)
     private Pedido pedido;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
     @Column(nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    // Precio del producto al momento de la compra (histórico, no cambia si luego cambia el catálogo)
+    @Column(name = "precio_unitario", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
     @Column(nullable = false, precision = 10, scale = 2)
